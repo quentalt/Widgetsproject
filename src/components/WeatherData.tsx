@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography } from "@mui/material";
+import {Card, CardContent, Typography} from "@mui/material";
 interface Props {
     place: string;
 }
@@ -9,7 +9,12 @@ interface Weather {
     humidity: number;
     wind: number;
     icon: string;
+
+    main: {
+        temp: number;
+    }
 }
+
 
 const WeatherData = ({ place }: Props) => {
     const [weatherData, setWeatherData] = useState<Weather | null>(null);
@@ -32,6 +37,9 @@ const WeatherData = ({ place }: Props) => {
                     humidity: data.main.humidity,
                     wind: data.wind.speed,
                     icon: data.weather[0].icon,
+                    main: {
+                        temp: data.main.temp - 273.15
+                    }
                 });
             } catch (error) {
                 console.error(error);
@@ -48,12 +56,25 @@ const WeatherData = ({ place }: Props) => {
 
     //mui
     return (
-        <div>
-            <Typography variant="h6">The weather in {place} is {weatherData.weather}.</Typography>
-            <Typography variant="h6">Humidity: {weatherData.humidity}%</Typography>
-            <Typography variant="h6">Wind: {weatherData.wind} m/s</Typography>
-            <img src={`http://openweathermap.org/img/w/${weatherData.icon}.png`} alt="weather icon"/>
-        </div>
+        <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+                <Typography variant="h5" component="div">
+                    The weather in {place} is {weatherData.weather}
+                </Typography>
+                <Typography variant="body1" component="div">
+                    Humidity: {weatherData.humidity}%
+                    <br/>
+                    Wind: {weatherData.wind} m/s
+                </Typography>
+                <Typography variant="body1">
+                    Temperature: {weatherData.main.temp}°C
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    <img src={`http://openweathermap.org/img/w/${weatherData.icon}.png`} alt="weather icon"/>
+                </Typography>
+
+            </CardContent>
+        </Card>
     );
 };
 

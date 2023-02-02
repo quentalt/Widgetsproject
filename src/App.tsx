@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import WeatherData from "./components/WeatherData";
 import MapboxData from "./components/MapboxData";
 import {v1 as uuidv1} from "uuid";
-import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
+import {Button, FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -37,8 +37,9 @@ export const App = () => {
     return (
         <>
             <div>
-                <TextFieldComponent place={places[0]} setPlace={(place) => setPlaces([place])}/>
-                <button onClick={addWeatherData}>Add Weather Data</button>
+                <TextFieldComponent place={places[0]} setPlace={place => setPlaces([place])}/>
+
+                <Button onClick={addWeatherData}>Add Weather Data</Button>
                 <br/>
                 <ResponsiveReactGridLayout
                     className="layout"
