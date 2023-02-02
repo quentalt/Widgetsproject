@@ -24,9 +24,9 @@ export const App = () => {
             }/> }]);
     };
 
-    const addMapboxData = () => {
+    {*/const addMapboxData = () => {
         setItems([...items, { id: uuidv1(), component: <MapboxData /> }]);
-    };
+    };*/}
 
 
     const removeItem = (id: string) => {
