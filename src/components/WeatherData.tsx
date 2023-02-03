@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {Card, CardContent, Typography} from "@mui/material";
+import {Card, CardContent, ThemeProvider, Typography} from "@mui/material";
+import {createTheme} from "@mui/material/styles";
+
 interface Props {
     place: string;
 }
@@ -18,6 +20,9 @@ interface Weather {
 
 const WeatherData = ({ place }: Props) => {
     const [weatherData, setWeatherData] = useState<Weather | null>(null);
+
+
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -53,29 +58,29 @@ const WeatherData = ({ place }: Props) => {
     if (!weatherData) {
         return <div>Loading weather data...</div>;
     }
-
-    //mui
     return (
-        <Card sx={{ minWidth: 275 }}>
-            <CardContent>
-                <Typography variant="h5" component="div">
-                    The weather in {place} is {weatherData.weather}
-                </Typography>
-                <Typography variant="body1" component="div">
-                    Humidity: {weatherData.humidity}%
-                    <br/>
-                    Wind: {weatherData.wind} m/s
-                </Typography>
-                <Typography variant="body1">
-                    Temperature: {weatherData.main.temp}°C
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            <Card sx={{minWidth: 275}}>
+                <CardContent>
+                    <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
+                        Weather in {place}
+                    </Typography>
+                    <Typography variant="h5" component="div">
+                        {weatherData.weather}
+                    </Typography>
+                    <Typography sx={{mb: 1.5}} color="text.secondary">
+                        Temperature: {weatherData.main.temp.toFixed(1)} °C
+                    </Typography>
+                    <Typography sx={{mb: 1.5}} color="text.secondary">
+                        Humidity: {weatherData.humidity} %
+                    </Typography>
+                    <Typography sx={{mb: 1.5}} color="text.secondary">
+                        Wind: {weatherData.wind} m/s
+                    </Typography>
                     <img src={`http://openweathermap.org/img/w/${weatherData.icon}.png`} alt="weather icon"/>
-                </Typography>
-
-            </CardContent>
-        </Card>
+                </CardContent>
+            </Card>
     );
+
 };
 
 export default WeatherData;

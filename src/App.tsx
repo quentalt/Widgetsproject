@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {createContext, useContext, useState} from "react";
 import { WidthProvider, Responsive } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
@@ -7,13 +7,35 @@ import CloseIcon from '@mui/icons-material/Close';
 import WeatherData from "./components/WeatherData";
 import MapboxData from "./components/MapboxData";
 import {v1 as uuidv1} from "uuid";
-import {Button, FormControl, InputLabel, MenuItem, Select} from "@mui/material";
+import {Button, FormControl, IconButton, InputLabel, MenuItem, PaletteMode, Select, ThemeProvider} from "@mui/material";
+import {createTheme} from "@mui/material/styles";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
-export const App = () => {
+function App() {
+
+    const [mode, setMode] = useState<PaletteMode>('light');
     const [places, setPlaces] = useState<string[]>([]);
     const [items, setItems] = useState<{ id: string; component: JSX.Element }[]>([]);
+
+
+    let ColorModeContext = createContext({
+        toggleColorMode: () => {
+            setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        }
+    });
+
+    const colorMode = useContext(ColorModeContext);
+
+    //dark theme
+
+    const theme = createTheme({
+        palette: {
+            mode,
+        }
+    });
 
     const addItem = (component: JSX.Element) => {
         setItems([...items, { id: uuidv1(), component }]);
@@ -24,9 +46,9 @@ export const App = () => {
             }/> }]);
     };
 
-    {*/const addMapboxData = () => {
-        setItems([...items, { id: uuidv1(), component: <MapboxData /> }]);
-    };*/}
+    /*  const addMapboxData = () => {
+          setItems([...items, { id: uuidv1(), component: <MapboxData /> }]);
+      };*/
 
 
     const removeItem = (id: string) => {
@@ -35,11 +57,13 @@ export const App = () => {
 
 
     return (
-        <>
+        <ThemeProvider theme={createTheme({palette: {mode}})}>
+        <IconButton sx={{ml: 1}} onClick={colorMode.toggleColorMode} color="inherit">
+                {theme.palette.mode === 'dark' ? <Brightness7Icon/> : <Brightness4Icon/>}
+            </IconButton>
             <div>
                 <TextFieldComponent place={places[0]} setPlace={place => setPlaces([place])}/>
-
-                <Button onClick={addWeatherData}>Add Weather Data</Button>
+                <Button onClick={addWeatherData}>Ajouter un widget météo</Button>
                 <br/>
                 <ResponsiveReactGridLayout
                     className="layout"
@@ -58,7 +82,7 @@ export const App = () => {
                     ))}
                 </ResponsiveReactGridLayout>
                 <div>
-                    <FormControl sx={{ m: 1, minWidth: 92 }}>
+                    <FormControl sx={{m: 1, minWidth: 92}}>
                         <InputLabel id="demo-simple-select-autowidth-label">Widgets</InputLabel>
                         <Select
                             labelId="demo-simple-select-autowidth-label"
@@ -70,23 +94,19 @@ export const App = () => {
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>
-                            <MenuItem value={1} onClick={
-                                () => addItem(<WeatherData place={places[0]}/>)
-                            }>
+                            <MenuItem value={1} onClick={() => addItem(<WeatherData place={places[0]}/>)}>
                                 Weather
                             </MenuItem>
-                            <MenuItem value={2} onClick={
-                                () => addItem(<MapboxData />)
-                            }>
+                            <MenuItem value={2} onClick={() => addItem(<MapboxData/>)}>
                                 Map
                             </MenuItem>
                         </Select>
                     </FormControl>
                 </div>
             </div>
+        </ThemeProvider>
 
-        </>
     );
-};
+}
 
 export default App;

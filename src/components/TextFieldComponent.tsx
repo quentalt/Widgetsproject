@@ -1,10 +1,15 @@
 import React from 'react';
-import { styled, alpha } from '@mui/material/styles';
+import {styled, alpha, ThemeProvider} from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import {AppBar, Box, IconButton, Toolbar} from "@mui/material";
+import {AppBar, IconButton, PaletteMode, Stack, Toolbar} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
+import { createTheme } from '@mui/material/styles';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { createContext, useContext, useState } from 'react';
+
 interface Props {
     place : string;
     setPlace : (place : string) => void;
@@ -54,10 +59,28 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 
-export default function TextFieldComponent (props : Props) {
 
+
+
+
+export default function TextFieldComponent (props : Props) {
+  /*   const [mode, setMode] = useState<PaletteMode>('light');
+    let ColorModeContext = createContext({
+        toggleColorMode: () => {
+            setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        }
+    });
+
+    const colorMode = useContext(ColorModeContext);
+
+    let theme = createTheme({
+        palette: {
+            mode,
+        },
+    });
+ */
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        // <ThemeProvider theme={createTheme({ palette: { mode } })}>
             <AppBar position="static">
                 <Toolbar>
                     <IconButton
@@ -69,27 +92,27 @@ export default function TextFieldComponent (props : Props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                    >
-                        MUI
+                    <Typography variant="h6" noWrap component="div">
+                        Widgets App
                     </Typography>
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Recherche…"
-                            inputProps={{ 'aria-label': 'search' }}
-                            value={props.place}
-                            onChange={(event) => props.setPlace(event.target.value)}
-                        />
-                    </Search>
+                    <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ flexGrow: 1 }}>
+                        <Search>
+                            <SearchIconWrapper>
+                                <SearchIcon />
+                            </SearchIconWrapper>
+                            <StyledInputBase
+                                placeholder="Search…"
+                                inputProps={{ 'aria-label': 'search' }}
+                                value={props.place}
+                                onChange={(e) => props.setPlace(e.target.value)}
+                            />
+                        </Search>
+                        {/* <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+                            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                        </IconButton> */}
+                    </Stack>
                 </Toolbar>
             </AppBar>
-        </Box>
+
     );
 }
