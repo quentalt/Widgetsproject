@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import {Card, CardContent, ThemeProvider, Typography} from "@mui/material";
-import {createTheme} from "@mui/material/styles";
+import  { useState, useEffect } from 'react';
+import {Card, CardContent, Typography} from "@mui/material";
 
 interface Props {
     place: string;
@@ -20,8 +19,6 @@ interface Weather {
 
 const WeatherData = ({ place }: Props) => {
     const [weatherData, setWeatherData] = useState<Weather | null>(null);
-
-
 
 
     useEffect(() => {
