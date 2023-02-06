@@ -79,9 +79,14 @@ function App() {
                         </IconButton>
                     </Toolbar>
                 </AppBar>
-            </Box><br/><TextFieldComponent place={places[0]} setPlace={place => setPlaces([place])}/><br/><Button
+            </Box><br/>
+            <TextFieldComponent place={places[0]} setPlace={place => setPlaces([place])}/>
+            <br/>
+            <Button
             variant="contained" color="secondary" onClick={addWeatherData}>Ajouter un widget
-            météo</Button><ResponsiveReactGridLayout
+            météo</Button>
+            
+            <ResponsiveReactGridLayout
             className="layout"
             rowHeight={30}
             breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
