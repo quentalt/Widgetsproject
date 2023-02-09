@@ -20,7 +20,7 @@ const MapboxData: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const response = await fetch(
-            `https://api.geoapify.com/v1/geocode/search?text=${address}&limit=1&apiKey=e58c9da692aa4d4c8c45762a42d15b7b`
+            `https://api.geoapify.com/v1/geocode/search?text=${address}&limit=1&apiKey={${process.env.REACT_APP_GEOAPIFY_API_KEY}}`
         );
         const data = await response.json();
         setLocation(data);
