@@ -2,10 +2,8 @@ import React, {useState} from "react";
 import { WidthProvider, Responsive } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
-import TextFieldComponent from "./components/TextFieldComponent";
 import CloseIcon from '@mui/icons-material/Close';
 import WeatherData from "./components/WeatherData";
-import MapboxData from "./components/MapboxData";
 import {v1 as uuidv1} from "uuid";
 import {
     AppBar,
@@ -22,13 +20,14 @@ import {
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
-
+import TextField from "@mui/material/TextField";
+import MapboxData from "./components/MapboxData";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 
 function App() {
     const [isDarkTheme, setIsDarkTheme] = useState(false);
-    const [places, setPlaces] = useState<string[]>([]);
+    const [location, setLocation] = useState("");
     const [items, setItems] = useState<{ id: string; component: JSX.Element }[]>([]);
 
     const changeTheme = () => {
@@ -41,8 +40,7 @@ function App() {
 
     const addWeatherData = () => {
         setItems([...items, {
-            id: uuidv1(), component: <WeatherData place={places[0]
-            }/>
+            id: uuidv1(), component: <WeatherData location={location}/>
         }]);
     };
 
@@ -79,24 +77,36 @@ function App() {
                         </IconButton>
                     </Toolbar>
                 </AppBar>
-            </Box><br/><TextFieldComponent place={places[0]} setPlace={place => setPlaces([place])}/><br/><Button
-            variant="contained" color="secondary" onClick={addWeatherData}>Ajouter un widget
-            météo</Button><ResponsiveReactGridLayout
-            className="layout"
-            rowHeight={30}
-            breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
-            cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
-            isDraggable
-            isResizable
-        >
+            </Box>
+            <br/>
+            <TextField
+                id="outlined-basic"
+                label="Rechercher une ville"
+                variant="outlined"
+                value={location}
+                onChange={event => setLocation(event.target.value)}
+            />
+            <Button
+                variant="contained" color="secondary" onClick={addWeatherData}>Ajouter un widget
+                météo
+            </Button>
 
-            {items.map(item => (
-                <div key={item.id} data-grid={{x: 0, y: 0, w: 2, h: 2, minW: 2, minH: 2}}>
-                    <CloseIcon onClick={() => removeItem(item.id)}/>
-                    {item.component}
-                </div>
-            ))}
-        </ResponsiveReactGridLayout>
+            <ResponsiveReactGridLayout
+                className="layout"
+                rowHeight={30}
+                breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
+                cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
+                isDraggable
+                isResizable
+            >
+
+                {items.map(item => (
+                    <div key={item.id} data-grid={{x: 0, y: 0, w: 2, h: 2, minW: 2, minH: 2}}>
+                        <CloseIcon onClick={() => removeItem(item.id)}/>
+                        {item.component}
+                    </div>
+                ))}
+            </ResponsiveReactGridLayout>
             <div>
                 <FormControl sx={{m: 1, minWidth: 120}}
                              variant="standard">
@@ -112,7 +122,8 @@ function App() {
                         <MenuItem value="">
                             <em>None</em>
                         </MenuItem>
-                        <MenuItem value={1} onClick={() => addItem(<WeatherData place={places[0]}/>)}>
+                        <MenuItem value={1} onClick={() => addItem(<WeatherData location={location}/>
+                        )}>
                             Weather
                         </MenuItem>
                         <MenuItem value={2} onClick={() => addItem(<MapboxData/>)}>
