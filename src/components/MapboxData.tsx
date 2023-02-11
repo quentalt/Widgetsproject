@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import iconMarker from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import L from "leaflet";
+import {Button, Input} from "@mui/material";
 
 const MapboxData: React.FC = () => {
     const [address, setAddress] = useState("");
@@ -35,13 +36,13 @@ const MapboxData: React.FC = () => {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <input
+                <Input
                     type="text"
                     placeholder="Enter address"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                 />
-                <button type="submit">Get Location</button>
+                <Button type="submit">Get Location</Button>
             </form>
             {location.features && location.features.length > 0 && (
                 <MapContainer center={center} zoom={9}
