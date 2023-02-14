@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import {MapContainer, Marker, Popup, TileLayer, useMap} from "react-leaflet";
 import 'leaflet/dist/leaflet.css';
 import iconMarker from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import L from "leaflet";
-
+import {Button, Input} from "@mui/material";
+import Changeview from "./Changeview";
 const MapboxData: React.FC = () => {
     const [address, setAddress] = useState("");
     const [location, setLocation] = useState<any>({});
@@ -17,10 +18,13 @@ const MapboxData: React.FC = () => {
         }
     }, [location]);
 
+
+
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const response = await fetch(
-            `https://api.geoapify.com/v1/geocode/search?text=${address}&limit=1&apiKey={${process.env.REACT_APP_GEOAPIFY_API_KEY}}`
+            `https://api.geoapify.com/v1/geocode/search?text=${address}&limit=1&apiKey=e58c9da692aa4d4c8c45762a42d15b7b`
         );
         const data = await response.json();
         setLocation(data);
@@ -32,20 +36,21 @@ const MapboxData: React.FC = () => {
         iconSize: [25, 41],
         iconAnchor: [12, 41],
     });
+
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <input
+                <Input
                     type="text"
                     placeholder="Enter address"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                 />
-                <button type="submit">Get Location</button>
+                <Button type="submit">Get Location</Button>
             </form>
             {location.features && location.features.length > 0 && (
-                <MapContainer center={center} zoom={9}
-                style={{ height: "400px", width: "600px" }}>
+                <MapContainer center={center} zoom={9} style={{ height: "400px", width: "600px" }}>
+                    <Changeview center={center} zoom={9} />
 
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
